@@ -5,14 +5,14 @@ import hashlib
 import csv
 import sys
 
-# Connect to SQLite3 database
+# koble til en sql database
 conn = sqlite3.connect('KundeDatabase.db')
 cursor = conn.cursor()
 
-# Create users table if it doesn't exist
+# Lag en bruker tabell hvis den ikke eksisterer
 cursor.execute("CREATE TABLE IF NOT EXISTS users (username TEXT, password TEXT, role TEXT)")
 
-# Import users from csv file
+# Importer brukere fra csv fil
 with open('KundeDatabase.csv', 'r') as f:
     reader = csv.reader(f)
     for row in reader:
@@ -22,13 +22,13 @@ with open('KundeDatabase.csv', 'r') as f:
         if user is None:
             cursor.execute("INSERT INTO users (username, password, role) VALUES (?, ?, ?)", (username, password, 'user'))
 
-# Function to delete a user
+# Funksjon for å slette brukere
 def delete_user(username):
     cursor.execute("DELETE FROM users WHERE username = ?", (username,))
     conn.commit()
     messagebox.showinfo("Success", "User deleted successfully")
 
-# Function to login a user
+# Funksjon for å logge inn på brukere
 def login():
     username = entry_username.get()
     password = hashlib.sha256(entry_password.get().encode()).hexdigest()
@@ -39,7 +39,7 @@ def login():
     else:
         messagebox.showinfo("Success", "Logged in successfully")
 
-# Function to create a user
+# Funksjon for å lage brukere
 def create_user():
     username = entry_username.get()
     password = hashlib.sha256(entry_password.get().encode()).hexdigest()
